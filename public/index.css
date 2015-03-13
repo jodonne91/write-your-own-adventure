@@ -1,0 +1,27 @@
+body{
+
+	background-image: url("misc/blank-page.gif");
+
+}
+
+.text-input{
+	display: block;
+	width: 427px;
+	height: 94px;
+
+}
+
+.text-input-area{
+	display: none;
+}
+
+.option{
+	float: left;
+}
+
+.option1-page{
+	clear: left;
+}
+
+.option2-page{
+}
