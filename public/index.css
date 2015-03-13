@@ -1,7 +1,37 @@
+*{
+	font-family: 'Shadows Into Light Two', cursive;
+	margin: 0;
+	padding: 0;
+}
+
 body{
-
+	background-repeat: no-repeat;
 	background-image: url("misc/blank-page.gif");
+	margin: 0;
+	padding: 0;
 
+}
+
+button{
+	font-size: 20px;
+	margin: 5px;
+	border-radius: 8px;
+	background-color: black;
+	color: white;
+	padding: 4px 16px 4px 16px;
+}
+
+td{
+	font-size: 18px;
+}
+
+header{
+	display:none;
+}
+
+.main{
+	margin-top: 8em;
+	margin-left: 4em;
 }
 
 .text-input{
@@ -9,6 +39,16 @@ body{
 	width: 427px;
 	height: 94px;
 
+}
+
+.input-button{
+	font-size: 24px;
+	margin: 8px;
+}
+
+.show-toc-button{
+	float: left;
+	clear: left;
 }
 
 .text-input-area{
@@ -24,4 +64,22 @@ body{
 }
 
 .option2-page{
+}
+
+.append-to{
+	float: left;
+  	clear: left;
+}
+
+#toc-item-id{
+	text-align: center;
+}
+
+.button-options{
+	margin: 30px;
+}
+
+.edit-link{
+	text-decoration: none;
+	color:	white;
 }

@@ -2,7 +2,7 @@
 <html>
   <head>
     <title>Write Your Own Adventure</title>
-
+<link href='http://fonts.googleapis.com/css?family=Shadows+Into+Light+Two' rel='stylesheet' type='text/css'>
     <script src="libs/underscore.js"></script>
     <script src="libs/jquery.js"></script>
     <script src="libs/handlebars.js"></script>
@@ -12,16 +12,31 @@
   </head>
   <body>
 
-    <div class = "main-column">
-      <button class = "new-page">Create Page</button>    
-      <div class = "text-input-area">
-        <textarea class = "text-input" name = "create" placeholder="story text goes here..."></textarea>
-        <input type="text" class = "option option1-text" placeholder = "Option 1"></input>
-        <input type="text" class = "option option2-text" placeholder = "Option 2"></input>
-        <input type="text" class = "option option1-page" placeholder = "Page #"></input>
-        <input type="text" class = "option option2-page" placeholder = "Page #"></input>
-        <button class = "input-button" name = "create">Submit</input>
+    <div class = "main">
+
+      <header>
+        <h1>Yee Ol' Book of Adventure</h1>
+
+
+        <button class = "new-page">Create Page</button>    
+        <div class = "text-input-area">
+          <textarea class = "text-input" name = "create" placeholder="story text goes here..."></textarea>
+          <input type="text" class = "option option1-text" placeholder = "Option 1"></input>
+          <input type="text" class = "option option2-text" placeholder = "Option 2"></input>
+          <input type="text" class = "option option1-page" placeholder = "Page #"></input>
+          <input type="text" class = "option option2-page" placeholder = "Page #"></input>
+          <button class = "input-button" name = "create">Submit</input>
+        </div>
+
+        <div class = "show-toc">
+          <button class = "show-toc-button">List Pages</button>
+        </div>
+      </header>
+
+      <div class = "append-to">
+
       </div>
+
     </div>
 
 
@@ -29,25 +44,39 @@
 
 
     <script type="x-handlebars-template" id = "page-content-template">
-      <section class = 'paragraphs'><p>{{text1}}</p><p>{{text2}}</p><p>{{text3}}</p><p>{{text4}}</p></section>
-      <section class = 'options'>
-        <a href = '#page/{{option1_link}}'><h4>{{option1}}</h4></a>
-        <a href = '#page/{{option2_link}}'><h4>{{option2}}</h4></a>
+      <section class = "paragraph">
+        <p>{{text}}</p>
+        <section class = 'options'>
+          <a href = '#page/{{page1}}'><h4>{{op1}}</h4></a>
+          <a href = '#page/{{page2}}'><h4>{{op2}}</h4></a>
+        </section>
+        <a href = ""><h4>Back to Table of Contents</h4></a>
       </section>
-      <a href = ""><h4>Back to Table of Contents</h4></a>
+      <section class = "button-options">
+        <td><button class = 'edit-button' id = '{{id}}' >Edit page</button></td>
+        <td><button class = 'delete-button' id = '{{id}}'>Delete page</button></td>
+      </section>
     </script>
 
     <script type="x-handlebars-template" id = "toc-template">
-      <section class = "toc">
-        <ul class = "toc-list">
-        </ul>
+      <section class = 'toc'>
+        <table class = 'toc-list'>
+          <tr>
+            <td>Title</td>
+            <td>Page #</tf>
+          </tr>
+        </table>
       </section>
     </script>
   
     <script type="x-handlebars-template" id = "toc-item-template">
-      <li class = "toc-item"><a href = "#page/{{page}}"><span>{{title}}</span></a><span>{{page}}<span></li>
+      <tr class = "toc-item">
+        <td><a href = "#page/{{id}}">{{text}}</a></td>
+        <td id = 'toc-item-id'>{{id}}</td>
+        <td><button class = 'edit-button' id = '{{id}}'><a class = 'edit-link' href='#edit/{{id}}'>Edit page</a></button></td>
+        <td><button class = 'delete-button' id = '{{id}}'>Delete page</button></td>
+      </tr>
     </script>
-
     
   </body>
 </html>

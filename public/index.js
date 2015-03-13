@@ -5,6 +5,10 @@ var PageModel = Backbone.Model.extend({
 		text: "missing text"
 	},
 
+	validation: function(text, option1, option2, link1, link2){
+
+	},
+
 	createPage: function(context, option1, option2){
 
 
@@ -31,104 +35,15 @@ var PagesCollection = Backbone.Collection.extend({
 
 	model: PageModel,
 
+	createPage: function(text, option1, option2, link1, link2){
 
+		var page = {};
 
-
-})
-
-var PageView = Backbone.View.extend({
-
-
-
-})
-
-var TocView = Backbone.View.extend({
-
-
-
-})
-
-var PageRouter = Backbone.Router.extend({
-
-	routes: {
-		"": "showTOC",
-		"page/:pageNumber": "showPage"
-	},
-
-	showTOC : function(){
-
-	    $.ajax({
-	    	url: "/api/toc/",
-	     	method: "GET",
-	    	success: function(result) {
-	        	console.log(result);
-	       		appendTOC(result)
-	    	}
-	    })
-
-	},
-
-	showPage : function(number){
-
-	    $.ajax({
-	    	url: "/api/page/" + number,
-	     	method: "GET",
-	    	success: function(result) {
-	        	console.log(result);
-	        	var p = result.paragraphs;
-	        	var o = result.links;
-	        	appendPage(p,o);
-	    	}
-	    })
-
-	}
-
-})
-
-
-
-var appendPage = function(p, o){
-
-	$('.main').html("");
-
-	var localObj = {
-		text1: p[0],
-		text2: p[1],
-		text3: p[2],
-		text4: p[3],
-		option1_link: o[0].page,
-		option2_link: o[1].page,
-		option1: o[0].sentence,
-		option2: o[1].sentence
-	};
-
-	$('.main').append(templates.pageContent(localObj));
-
-}
-
-var newPageInput = function(){
-
-	$('.new-page').on("click", function(){
-		$('.new-page').hide();
-		$('.text-input-area').show();
-	})
-
-	var page = {} ;
-
-	$('.input-button').on('click', function(){
-
-		page.text = $('.text-input').val();
-		page.op1 = $('.option1-text').val();
-		page.op2 = $('.option2-text').val();
-		page.page1 = $('.option1-page').val();
-		page.page2 = $('.option2-page').val();
-
-		console.log(page)
-
-		$('.text-input').val("");
-		$('.option').val("")
-		$('.text-input-area').hide();
-		$('.new-page').show();
+		page.text = text;
+		page.op1 = option1;
+		page.op2 = option2;
+		page.page1 = link1;
+		page.page2 = link2;
 
 		if(page.text === "" || page.op1 === "" || page.op2 === "" || page.page1 === "" || page.page2 === "")
 			{console.log("no page created"); return}
@@ -139,21 +54,184 @@ var newPageInput = function(){
 			console.log("no page created"); return
 		}
 
-		$.ajax({
-			url: "api/page",
-			method: "POST",
-			data: page,
-			success: function(data){
-				console.log(data)
-			}
+		console.log(this)
 
+		this.create(page);
+		this.fetch();
+
+
+	}
+
+
+
+
+})
+
+var PageView = Backbone.View.extend({
+
+	tagName: "div",
+
+	className: "page-content",
+
+	model: PageModel,
+
+	initialize: function(){
+		this.render();
+	},
+
+	render: function(){
+		//this.$el.html(templates.pageContent());
+	}
+
+
+})
+
+var TocView = Backbone.View.extend({
+
+	tagName: "tr",
+
+	className: "toc-item",
+
+	initialize: function() {
+
+  	},
+
+	render: function() {
+
+	}
+
+
+})
+
+var PageRouter = Backbone.Router.extend({
+
+	routes: {
+		"": "showTOC",
+		"page/:pageNumber": "showPage",
+		"edit/:pageNumber": "editPage"
+	},
+
+	showTOC : function(){
+		$('header').show();
+		pages.fetch({success: function(){displayTocItems()}})
+	},
+
+	showPage : function(number){
+
+		$('header').hide();
+		$('.append-to').html("")
+
+		try{
+			var pageObj = pages.get(number).toJSON()	
+		}
+		catch(error){
+			var pageObj = {text: "no page content"}
+		}
+
+		$('.append-to').append(templates.pageContent(pageObj));
+
+
+		//append to page
+
+	},
+
+	editPage: function(number){
+		try{
+			var model = pages.get(number).toJSON();
+		}
+		catch(error){
+			var model = {text: "Oops, no content."}
+		}
+
+		$('header').hide();
+		$('.append-to').html("");
+
+
+
+	}
+
+})
+
+var editButton = function(){
+	$('.edit-button').on('click', function(){
+
+	})
+}
+
+var deleteButton = function(){
+	$('.delete-button').on('click', function(){
+
+
+	})
+}
+
+var tocButtonListener = function(){
+    $('.show-toc-button').on('click', function(){
+
+		displayTocItems();
+
+	})
+}
+
+var displayTocItems = function(){
+	pages.fetch({success: function(){
+
+		$('.append-to').html("")
+		$('.append-to').append(templates.toc())
+
+		_.each(pages.toJSON(), function(page){
+			$('.toc-list').append(templates.tocItem(page))
 		})
+
+		tocButtonListener();
+		editButton();
+		deleteButton();
+
+	}});
+
+
+
+}
+
+
+var newPageInput = function(){
+
+	$('.new-page').on("click", function(){
+		$('.new-page').hide();
+		$('.text-input-area').show();
+	})
+
+	$('.input-button').on('click', function(){
+
+		pages.createPage($('.text-input').val(), $('.option1-text').val(), $('.option2-text').val(), $('.option1-page').val(), $('.option2-page').val())
+		displayTocItems();
+		//console.log(page)
+
+		$('.text-input').val("");
+		$('.option').val("")
+		$('.text-input-area').hide();
+		$('.new-page').show();
+
+		// pages.create(page)
+		// pages.fetch();
+
 	})
 
 }
 
-var templates = {}
+var templates = {};
+var pages;
+var toc;
+var router;
 
+
+var resetServer = function(){
+	_.each(pages.toArray(), function(page){
+		console.log(page);
+		page.destroy();
+	})
+	pages.fetch();
+}
 
 
 $(document).on("ready", function(){
@@ -162,6 +240,10 @@ $(document).on("ready", function(){
 	templates.toc = Handlebars.compile($('#toc-template').html());
 	templates.tocItem = Handlebars.compile($('#toc-item-template').html());
 
+	pages = new PagesCollection;
+	toc = new TocView;
+	router = new PageRouter;
+	pages.fetch();
 
 	Backbone.history.start();
 
