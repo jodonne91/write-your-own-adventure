@@ -35,7 +35,7 @@ var PagesCollection = Backbone.Collection.extend({
 
 	model: PageModel,
 
-	createPage: function(text, option1, option2, link1, link2){
+	createPage: function(text, pageNum, option1, option2, link1, link2){
 
 		var page = {};
 
@@ -44,6 +44,35 @@ var PagesCollection = Backbone.Collection.extend({
 		page.op2 = option2;
 		page.page1 = link1;
 		page.page2 = link2;
+		page.num = pageNum;
+
+		if(page.text === "" || page.op1 === "" || page.op2 === "" || page.page1 === "" || page.page2 === "" || page.num === "")
+			{console.log("no page created"); return}
+
+		if(_.isNumber(page.page1*1) && _.isNumber(page.page2*1) && _.isNumber(page.num*1)){
+		}
+		else {
+			console.log("no page created"); return
+		}
+
+		console.log(this)
+
+		this.create(page);
+		this.fetch();
+
+
+	},
+
+	updatePage: function(id, text, pageNum, option1, option2, link1, link2){
+
+		var page = {};
+
+		page.text = text;
+		page.op1 = option1;
+		page.op2 = option2;
+		page.page1 = link1;
+		page.page2 = link2;
+		page.num = pageNum;
 
 		if(page.text === "" || page.op1 === "" || page.op2 === "" || page.page1 === "" || page.page2 === "")
 			{console.log("no page created"); return}
@@ -56,9 +85,7 @@ var PagesCollection = Backbone.Collection.extend({
 
 		console.log(this)
 
-		this.create(page);
-		this.fetch();
-
+		this.sync("update", pages.get(id).set(page),{success: function(){pages.fetch()}});
 
 	}
 
@@ -145,23 +172,30 @@ var PageRouter = Backbone.Router.extend({
 
 		$('header').hide();
 		$('.append-to').html("");
+		$('.append-to').append(templates.editItem(model))
 
+		$('.confirm-edit').on('click', function(){
+			var id = $(this).attr("id")
+			console.log(id)
+			pages.updatePage(id, $('.text-edit').val(), $('.option1-edit').val(), $('.option2-edit').val(), $('.page1-edit').val(), $('.page2-edit').val())
+			window.location = "#";
+		})
 
+		$('.cancel-edit').on('click', function(){
 
+			//handles by link in button to '#'
+
+		})
 	}
 
 })
 
-var editButton = function(){
-	$('.edit-button').on('click', function(){
-
-	})
-}
 
 var deleteButton = function(){
 	$('.delete-button').on('click', function(){
-
-
+		var id = $(this).attr("id")
+		pages.get(id).destroy();
+		displayTocItems();
 	})
 }
 
@@ -184,7 +218,6 @@ var displayTocItems = function(){
 		})
 
 		tocButtonListener();
-		editButton();
 		deleteButton();
 
 	}});
@@ -233,12 +266,20 @@ var resetServer = function(){
 	pages.fetch();
 }
 
+function deleteAll(){
+	$('.delete-all-button').on('click', function(){
+		resetServer()
+		displayTocItems();
+	})
+}
+
 
 $(document).on("ready", function(){
 
 	templates.pageContent = Handlebars.compile($('#page-content-template').html());
 	templates.toc = Handlebars.compile($('#toc-template').html());
 	templates.tocItem = Handlebars.compile($('#toc-item-template').html());
+	templates.editItem = Handlebars.compile($('#edit-item-template').html());
 
 	pages = new PagesCollection;
 	toc = new TocView;
@@ -248,7 +289,17 @@ $(document).on("ready", function(){
 	Backbone.history.start();
 
 	newPageInput();
-
+	deleteAll();
+	renderSample();
 })
+
+var renderSample = function(){
+	$('.sample-book-button').on('click', function(){
+		_.each(book, function(page){
+			pages.create(page)
+		})
+		displayTocItems();
+	})
+}
 
 

@@ -2,6 +2,7 @@
 <html>
   <head>
     <title>Write Your Own Adventure</title>
+    <script src="Book.js"></script>
 <link href='http://fonts.googleapis.com/css?family=Shadows+Into+Light+Two' rel='stylesheet' type='text/css'>
     <script src="libs/underscore.js"></script>
     <script src="libs/jquery.js"></script>
@@ -31,6 +32,8 @@
         <div class = "show-toc">
           <button class = "show-toc-button">List Pages</button>
         </div>
+        <button class='sample-book-button'>Render sample pages</button>
+        <button class='delete-all-button'>Reset all pages</button>
       </header>
 
       <div class = "append-to">
@@ -73,9 +76,22 @@
       <tr class = "toc-item">
         <td><a href = "#page/{{id}}">{{text}}</a></td>
         <td id = 'toc-item-id'>{{id}}</td>
-        <td><button class = 'edit-button' id = '{{id}}'><a class = 'edit-link' href='#edit/{{id}}'>Edit page</a></button></td>
+        <td><button class = 'edit-button' id = '{{id}}'><a class = 'no-style-link' href='#edit/{{id}}'>Edit page</a></button></td>
         <td><button class = 'delete-button' id = '{{id}}'>Delete page</button></td>
       </tr>
+    </script>
+
+    <script type='x-handlebars-template' id = 'edit-item-template'>
+      <div class = 'edit-item-form'>
+        <h2 style='margin-bottom: 20px'>Edit Form</h2>
+        Text: <input class ='edit-item text-edit' type='text' value = '{{text}}'></input>
+        First Option: <input class ='edit-item option1-edit' type='text' value = '{{op1}}'></input>
+        Second Option: <input class ='edit-item option2-edit' type='text' value = '{{op2}}'></input>
+        First Link: <input class ='edit-item page1-edit' type='text' value = '{{page1}}'></input>
+        Second Link: <input class ='edit-item page2-edit' type='text' value = '{{page2}}'></input>
+        <button class = 'confirm-edit' id="{{id}}">Confirm</button>
+        <button class = 'cancel-edit'><a class = 'no-style-link' href = '#'>Cancel</a></button>
+      </div>
     </script>
     
   </body>

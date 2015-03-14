@@ -32,6 +32,7 @@ header{
 .main{
 	margin-top: 8em;
 	margin-left: 4em;
+	width: 65%;
 }
 
 .text-input{
@@ -79,7 +80,18 @@ header{
 	margin: 30px;
 }
 
-.edit-link{
+.no-style-link{
 	text-decoration: none;
 	color:	white;
+}
+
+.edit-item{
+	display: block;
+	width: 30em;
+	font-size: 18px;
+	margin-bottom: 10px;
+}
+
+button:hover{
+	cursor: pointer;
 }
