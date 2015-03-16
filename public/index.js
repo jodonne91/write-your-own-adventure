@@ -35,7 +35,7 @@ var PagesCollection = Backbone.Collection.extend({
 
 	model: PageModel,
 
-	createPage: function(text, pageNum, option1, option2, link1, link2){
+	createPage: function(text, option1, option2, link1, link2){
 
 		var page = {};
 
@@ -44,7 +44,7 @@ var PagesCollection = Backbone.Collection.extend({
 		page.op2 = option2;
 		page.page1 = link1;
 		page.page2 = link2;
-		page.num = pageNum;
+		//page.num = pageNum;
 
 		if(page.text === "" || page.op1 === "" || page.op2 === "" || page.page1 === "" || page.page2 === "" || page.num === "")
 			{console.log("no page created"); return}
@@ -63,7 +63,7 @@ var PagesCollection = Backbone.Collection.extend({
 
 	},
 
-	updatePage: function(id, text, pageNum, option1, option2, link1, link2){
+	updatePage: function(id, text, option1, option2, link1, link2){
 
 		var page = {};
 
@@ -72,7 +72,7 @@ var PagesCollection = Backbone.Collection.extend({
 		page.op2 = option2;
 		page.page1 = link1;
 		page.page2 = link2;
-		page.num = pageNum;
+		//page.num = pageNum;
 
 		if(page.text === "" || page.op1 === "" || page.op2 === "" || page.page1 === "" || page.page2 === "")
 			{console.log("no page created"); return}
