@@ -68,6 +68,7 @@ header{
 }
 
 .append-to{
+	width: 720px;
 	float: left;
   	clear: left;
 }
